@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ser:proxyServiceEntry xmlns:ser="http://www.bea.com/wli/sb/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oper="http://xmlns.oracle.com/servicebus/proxy/operations" xmlns:tran="http://www.bea.com/wli/sb/transports" xmlns:env="http://www.bea.com/wli/config/env">
+    <ser:coreEntry>
+        <ser:binding type="Mixed" xsi:type="con:MixedBindingType" xmlns:con="http://www.bea.com/wli/sb/services/bindings/config">
+            <con:request type="Text"/>
+        </ser:binding>
+        <oper:operations enabled="true"/>
+        <ser:invoke ref="sample.listener/Services/ppl.sample.listener" xsi:type="con:PipelineRef" xmlns:con="http://www.bea.com/wli/sb/pipeline/config"/>
+        <ser:xqConfiguration>
+            <ser:snippetVersion>1.0</ser:snippetVersion>
+        </ser:xqConfiguration>
+    </ser:coreEntry>
+    <ser:endpointConfig>
+        <tran:provider-id>kafka</tran:provider-id>
+        <tran:inbound>true</tran:inbound>
+        <tran:URI>
+            <env:value>bgd-lab:2181</env:value>
+        </tran:URI>
+        <tran:inbound-properties/>
+        <tran:provider-specific xsi:type="kaf:KafkaEndPointConfiguration" xmlns:kaf="http://oracle/ateam/sb/transports/kafka">
+            <kaf:topic-name>kafkatopic</kaf:topic-name>
+            <kaf:request-type>TEXT</kaf:request-type>
+            <kaf:response-type>NONE</kaf:response-type>
+            <kaf:custom-props/>
+            <kaf:inbound-properties>
+                <kaf:dispatch-policy>default</kaf:dispatch-policy>
+                <kaf:consumer-threads>1</kaf:consumer-threads>
+                <kaf:group-id>srv-kafka.sample.listener</kaf:group-id>
+                <kaf:partition-assignment-strategy>range</kaf:partition-assignment-strategy>
+                <kaf:socket-timeout-ms>30000</kaf:socket-timeout-ms>
+                <kaf:socket-receive-buffer-bytes>65536</kaf:socket-receive-buffer-bytes>
+                <kaf:fetch-message-max-bytes>1048576</kaf:fetch-message-max-bytes>
+                <kaf:num-consumer-fetchers>1</kaf:num-consumer-fetchers>
+                <kaf:auto-commit-enable>true</kaf:auto-commit-enable>
+                <kaf:auto-commit-interval-ms>60000</kaf:auto-commit-interval-ms>
+                <kaf:queued-max-message-chunks>2</kaf:queued-max-message-chunks>
+                <kaf:rebalance-max-retries>4</kaf:rebalance-max-retries>
+                <kaf:fetch-min-bytes>1</kaf:fetch-min-bytes>
+                <kaf:fetch-wait-max-ms>100</kaf:fetch-wait-max-ms>
+                <kaf:rebalance-backoff-ms>2000</kaf:rebalance-backoff-ms>
+                <kaf:refresh-leader-backoff-ms>200</kaf:refresh-leader-backoff-ms>
+                <kaf:auto-offset-reset>smallest</kaf:auto-offset-reset>
+                <kaf:consumer-timeout-ms>-1</kaf:consumer-timeout-ms>
+                <kaf:exclude-internal-topics>true</kaf:exclude-internal-topics>
+                <kaf:zookeeper-session-timeout-ms>6000</kaf:zookeeper-session-timeout-ms>
+                <kaf:zookeeper-connection-timeout-ms>6000</kaf:zookeeper-connection-timeout-ms>
+                <kaf:zookeeper-sync-time-ms>2000</kaf:zookeeper-sync-time-ms>
+                <kaf:offsets-storage>kafka</kaf:offsets-storage>
+                <kaf:offsets-channel-backoff-ms>1000</kaf:offsets-channel-backoff-ms>
+                <kaf:offsets-channel-socket-timeout-ms>10000</kaf:offsets-channel-socket-timeout-ms>
+                <kaf:offsets-commit-max-retries>5</kaf:offsets-commit-max-retries>
+                <kaf:dual-commit-enabled>false</kaf:dual-commit-enabled>
+            </kaf:inbound-properties>
+        </tran:provider-specific>
+    </ser:endpointConfig>
+</ser:proxyServiceEntry>

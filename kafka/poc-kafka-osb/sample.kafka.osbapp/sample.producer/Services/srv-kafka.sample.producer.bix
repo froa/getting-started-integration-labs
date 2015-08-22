@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:businessServiceEntry xmlns:con="http://xmlns.oracle.com/servicebus/business/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oper="http://xmlns.oracle.com/servicebus/business/operations" xmlns:ser="http://www.bea.com/wli/sb/services" xmlns:tran="http://www.bea.com/wli/sb/transports" xmlns:env="http://www.bea.com/wli/config/env" xmlns:kaf="http://oracle/ateam/sb/transports/kafka">
+    <con:coreEntry>
+        <con1:binding type="Mixed" xsi:type="con:MixedBindingType" xmlns:con="http://www.bea.com/wli/sb/services/bindings/config" xmlns:con1="http://xmlns.oracle.com/servicebus/business/config">
+            <con:request type="Text"/>
+        </con1:binding>
+        <oper:operations enabled="true">
+            <oper:throttling enabled="false"/>
+            <oper:resultCachingEnabled>true</oper:resultCachingEnabled>
+        </oper:operations>
+        <con:xqConfiguration>
+            <ser:snippetVersion>1.0</ser:snippetVersion>
+        </con:xqConfiguration>
+    </con:coreEntry>
+    <con:endpointConfig>
+        <tran:provider-id>kafka</tran:provider-id>
+        <tran:inbound>false</tran:inbound>
+        <tran:URI>
+            <env:value>bgd-lab:9092</env:value>
+        </tran:URI>
+        <tran:outbound-properties>
+            <tran:load-balancing-algorithm>none</tran:load-balancing-algorithm>
+            <tran:retry-count>0</tran:retry-count>
+            <tran:retry-interval>0</tran:retry-interval>
+        </tran:outbound-properties>
+        <tran:provider-specific xsi:type="kaf:KafkaEndPointConfiguration">
+            <kaf:topic-name>kafkatopic</kaf:topic-name>
+            <kaf:request-type>TEXT</kaf:request-type>
+            <kaf:response-type>NONE</kaf:response-type>
+            <kaf:custom-props/>
+            <kaf:outbound-properties>
+                <kaf:acks>1</kaf:acks>
+                <kaf:timeout-ms>30000</kaf:timeout-ms>
+                <kaf:buffer-memory>33554432</kaf:buffer-memory>
+                <kaf:compression-type>none</kaf:compression-type>
+                <kaf:retries>0</kaf:retries>
+                <kaf:batch-size>16384</kaf:batch-size>
+                <kaf:client-id>srv-kafka.sample.producer</kaf:client-id>
+                <kaf:linger-ms>0</kaf:linger-ms>
+                <kaf:max-request-size>1048576</kaf:max-request-size>
+                <kaf:receive-buffer-bytes>32768</kaf:receive-buffer-bytes>
+                <kaf:send-buffer-bytes>131072</kaf:send-buffer-bytes>
+                <kaf:block-on-buffer-full>true</kaf:block-on-buffer-full>
+                <kaf:metadata-fetch-timeout-ms>60000</kaf:metadata-fetch-timeout-ms>
+                <kaf:metadata-max-age-ms>300000</kaf:metadata-max-age-ms>
+                <kaf:reconnect-backoff-ms>10</kaf:reconnect-backoff-ms>
+                <kaf:retry-backoff-ms>0</kaf:retry-backoff-ms>
+            </kaf:outbound-properties>
+        </tran:provider-specific>
+    </con:endpointConfig>
+</con:businessServiceEntry>

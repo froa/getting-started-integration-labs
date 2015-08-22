@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:pipelineEntry xmlns:con="http://www.bea.com/wli/sb/pipeline/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:con1="http://www.bea.com/wli/sb/stages/logging/config" xmlns:con2="http://www.bea.com/wli/sb/stages/config">
+    <con:coreEntry>
+        <con:binding type="Mixed" xsi:type="con:MixedBindingType">
+            <con:request type="Text"/>
+        </con:binding>
+        <con:xqConfiguration>
+            <con:snippetVersion>1.0</con:snippetVersion>
+        </con:xqConfiguration>
+    </con:coreEntry>
+    <con:router>
+        <con:pipeline type="request" name="request-7f000001.N5e8a0907.0.14f55cdb9c2.N8000">
+            <con:stage id="_StageId-7f000001.N5e8a0907.0.14f55cdb9c2.N7ffe" name="stg_logging">
+                <con:context/>
+                <con:actions>
+                    <con1:log>
+                        <con2:id>_ActionId-7f000001.N5e8a0907.0.14f55cdb9c2.N7fca</con2:id>
+                        <con1:logLevel>error</con1:logLevel>
+                        <con1:expr>
+                            <con2:xqueryText>$body</con2:xqueryText>
+                        </con1:expr>
+                        <con1:message>LOG Listener</con1:message>
+                    </con1:log>
+                </con:actions>
+            </con:stage>
+        </con:pipeline>
+        <con:pipeline type="response" name="response-7f000001.N5e8a0907.0.14f55cdb9c2.N7fff"/>
+        <con:flow>
+            <con:pipeline-node name="PipelinePairNode1">
+                <con:request>request-7f000001.N5e8a0907.0.14f55cdb9c2.N8000</con:request>
+                <con:response>response-7f000001.N5e8a0907.0.14f55cdb9c2.N7fff</con:response>
+            </con:pipeline-node>
+        </con:flow>
+    </con:router>
+</con:pipelineEntry>

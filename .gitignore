@@ -6,3 +6,7 @@
 .DS_Store
 #Maven
 **/target/
+#JDeveloper
+**/.data/
+*.jws
+*.jpr
