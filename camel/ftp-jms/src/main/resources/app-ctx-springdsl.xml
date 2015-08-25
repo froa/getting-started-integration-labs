@@ -1,0 +1,23 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <bean id="jms" class="org.apache.camel.component.jms.JmsComponent">
+        <property name="connectionFactory">
+            <bean class="org.apache.activemq.ActiveMQConnectionFactory">
+                <property name="brokerURL" value="tcp://localhost:61616" />
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="downloadProcessor" class="cl.fr.learncamel.ftpjms.processor.DownloadProcessor"/>
+
+    <camelContext id="camelCtx" xmlns="http://camel.apache.org/schema/spring">
+        <route>
+            <from uri="ftp://bgd-lab?username=ftpuser&amp;password=ftpuser"/>
+            <process ref="downloadProcessor"/>
+            <to uri="jms:incomingOrders"/>
+        </route>
+    </camelContext>
+
+</beans>
