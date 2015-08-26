@@ -12,11 +12,18 @@
 
     <bean id="downloadProcessor" class="cl.fr.learncamel.ftpjms.processor.DownloadProcessor"/>
 
+    <bean id="listenerProcessor" class="cl.fr.learncamel.ftpjms.processor.ListenerProcessor"/>
+
     <camelContext id="camelCtx" xmlns="http://camel.apache.org/schema/spring">
         <route>
             <from uri="ftp://bgd-lab?username=ftpuser&amp;password=ftpuser"/>
             <process ref="downloadProcessor"/>
             <to uri="jms:incomingOrders"/>
+        </route>
+        <route>
+            <from uri="jms:incomingOrders"/>
+            <process ref="listenerProcessor"/>
+            <to uri="file:src/data"/>
         </route>
     </camelContext>
 

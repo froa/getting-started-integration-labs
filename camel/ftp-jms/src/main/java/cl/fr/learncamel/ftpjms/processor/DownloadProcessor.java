@@ -15,6 +15,6 @@ public class DownloadProcessor implements Processor {
     @Override
     public void process(Exchange exchange) throws Exception {
         logger.debug("DSL------> file downloaded: "
-                + exchange.getIn().getHeader("CamelFileName"));
+                + exchange.getIn().getHeader("CamelFileName") + " ->FTP Reply Code: " + exchange.getIn().getHeader("CamelFtpReplyCode"));
     }
 }
