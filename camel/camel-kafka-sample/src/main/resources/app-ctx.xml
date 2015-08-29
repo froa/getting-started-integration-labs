@@ -1,0 +1,21 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                            http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+
+    <context:property-placeholder location="classpath:app-ctx.properties"/>
+
+    <context:annotation-config />
+
+    <camelContext id="camelCtx" xmlns="http://camel.apache.org/schema/spring">
+        <packageScan>
+            <package>cl.fr.learncamel.camelkafkasample.routes</package>
+            <excludes>**.*Test*</excludes>
+            <includes>**.*</includes>
+        </packageScan>
+    </camelContext>
+
+</beans>
