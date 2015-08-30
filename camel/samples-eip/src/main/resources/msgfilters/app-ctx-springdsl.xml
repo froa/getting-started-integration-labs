@@ -17,7 +17,7 @@
 
     <context:annotation-config />
 
-
+    <context:component-scan base-package="cl.fr.learncamel.common"/>
 
     <camelContext id="camelCtx" xmlns="http://camel.apache.org/schema/spring">
 
@@ -26,10 +26,6 @@
         <endpoint id="fileInEP" uri="file:${file.dataInUri}" />
 
         <endpoint id="queueXmlOrdersUri" uri="jms:${queueXmlOrdersUri}" />
-
-        <endpoint id="queueCsvOrdersUri" uri="jms:${queueCsvOrdersUri}" />
-
-        <endpoint id="queueBadOrdersUri" uri="jms:${queueBadOrdersUri}" />
 
         <endpoint id="queueContinuedOrderProcessingUri" uri="jms:${queueContinuedOrderProcessingUri}" />
 
@@ -41,17 +37,18 @@
                     <simple>${header.CamelFileName} regex '^.*xml$'</simple>
                     <to uri="ref:queueXmlOrdersUri"/>
                 </when>
-                <when>
-                    <simple>${header.CamelFileName} regex '^.*csv$'</simple>
-                    <to uri="ref:queueCsvOrdersUri"/>
-                </when>
-                <otherwise>
-                    <to uri="ref:queueBadOrdersUri"/>
-                    <stop/>
-                </otherwise>
             </choice>
             <to uri="ref:queueContinuedOrderProcessingUri"/>
         </route>
+
+        <route>
+            <from uri="ref:queueXmlOrdersUri"/>
+            <filter>
+                <xpath>/order[not(@test)]</xpath>
+                <process ref="loggerOrderProcessor"/>
+            </filter>
+        </route>
+
     </camelContext>
 
 </beans>

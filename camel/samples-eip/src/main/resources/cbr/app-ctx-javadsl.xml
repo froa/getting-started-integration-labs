@@ -19,6 +19,7 @@
 
     <camelContext id="camelCtx" xmlns="http://camel.apache.org/schema/spring">
         <packageScan>
+            <package>cl.fr.learncamel.common.routes</package>
             <package>cl.fr.learncamel.sampleseip.cbr.routes</package>
             <excludes>**.*Test*</excludes>
             <includes>**.*</includes>

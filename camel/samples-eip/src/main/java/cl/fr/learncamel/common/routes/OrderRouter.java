@@ -1,4 +1,4 @@
-package cl.fr.learncamel.sampleseip.cbr.routes;
+package cl.fr.learncamel.common.routes;
 
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.slf4j.Logger;

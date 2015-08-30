@@ -1,6 +1,7 @@
 package cl.fr.learncamel.sampleseip.msgfilters.routes;
 
 import org.apache.camel.Exchange;
+import org.apache.camel.Message;
 import org.apache.camel.Processor;
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.slf4j.Logger;
@@ -32,12 +33,12 @@ public class OrderRouterWithFilter extends SpringRouteBuilder {
                 .filter(xpath("/order[not(@test)]"))
                 .process(new Processor() {
                     public void process(Exchange exchange) throws Exception {
-
-                        logger.debug("BODY_AS_STR:->" + exchange.getIn().getBody(String.class));
-
+                        Message msg = exchange.getIn();
+                        logger.debug("BODY_AS_STR:->" + msg.getBody(String.class));
                         logger.debug("Received XML order: "
-                                + exchange.getIn().getHeader("CamelFileName"));
-                    } })
+                                + msg.getHeader("CamelFileName"));
+                    }
+                })
               .to("jms:" + queueContinuedOrderProcessingUri);
 
     }
