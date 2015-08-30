@@ -27,7 +27,6 @@ public class OrderRouterWithFilter extends SpringRouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        logger.debug("zzzz entrando! antes del filter");
         from("jms:" + queueXmlOrdersUri)
                 //Filter Pattern
                 .filter(xpath("/order[not(@test)]"))
