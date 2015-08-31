@@ -1,0 +1,59 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                            http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <context:property-placeholder location="classpath:app-ctx.properties"/>
+
+    <bean id="jms" class="org.apache.camel.component.jms.JmsComponent">
+        <property name="connectionFactory">
+            <bean class="org.apache.activemq.ActiveMQConnectionFactory">
+                <property name="brokerURL" value="${activemq.brokerURL}" />
+            </bean>
+        </property>
+    </bean>
+
+    <context:annotation-config />
+
+    <context:component-scan base-package="cl.fr.learncamel.common"/>
+
+
+    <bean id="executor" class="java.util.concurrent.Executors" factory-method="newFixedThreadPool">
+        <constructor-arg index="0" value="${threadsExecutor}"/>
+    </bean>
+
+    <camelContext id="camelCtx" xmlns="http://camel.apache.org/schema/spring">
+
+        <!-- endpoints definitions - it is necessary due direct property in the uri is not supported -->
+
+        <endpoint id="fileInEP" uri="file:${file.dataInUri}" />
+
+        <endpoint id="queueXmlOrdersUri" uri="jms:${queueXmlOrdersUri}" />
+
+        <endpoint id="queueAccountingUri" uri="jms:${queueAccountingUri}" />
+
+        <endpoint id="queueProductionUri" uri="jms:${queueProductionUri}" />
+
+        <route>
+            <from uri="ref:fileInEP"/>
+            <choice>
+                <when>
+                    <simple>${header.CamelFileName} regex '^.*xml$'</simple>
+                    <to uri="ref:queueXmlOrdersUri"/>
+                </when>
+            </choice>
+        </route>
+
+        <route>
+            <from uri="ref:queueXmlOrdersUri"/>
+            <multicast stopOnException="true" parallelProcessing="true" executorServiceRef="executor">
+                <to uri="ref:queueAccountingUri"/>
+                <to uri="ref:queueProductionUri"/>
+        </multicast>
+        </route>
+
+    </camelContext>
+
+</beans>

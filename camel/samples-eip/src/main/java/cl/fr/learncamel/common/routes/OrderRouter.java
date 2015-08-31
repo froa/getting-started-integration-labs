@@ -34,7 +34,6 @@ public class OrderRouter extends SpringRouteBuilder {
 
     @Override
     public void configure() throws Exception {
-
         from("file:" + fileOrdersUri)
                 .choice()
                     .when(header("CamelFileName").endsWith(".xml"))

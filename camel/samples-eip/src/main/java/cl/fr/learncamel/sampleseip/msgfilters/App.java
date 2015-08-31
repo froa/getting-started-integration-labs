@@ -8,7 +8,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 /**
  * Created by froa on 8/29/15.
  *
- *  <a>Content Based Routing Pattern</a>
+ *  <a>Message Filters Pattern</a>
  *
  * mvn exec:java -Dexec.mainClass="cl.fr.learncamel.sampleseip.msgfilters.App"
  *
