@@ -17,12 +17,10 @@
 
     <context:annotation-config />
 
-    <context:component-scan base-package="cl.fr.learncamel.common"/>
+    <context:component-scan base-package="cl.fr.learncamel.common.processors"/>
 
+    <context:component-scan base-package="cl.fr.learncamel.sampleseip.recipientlist.processors"/>
 
-    <bean id="executor" class="java.util.concurrent.Executors" factory-method="newFixedThreadPool">
-        <constructor-arg index="0" value="${threadsExecutor}"/>
-    </bean>
 
     <camelContext id="camelCtx" xmlns="http://camel.apache.org/schema/spring">
 
@@ -47,11 +45,14 @@
         </route>
 
         <route>
-            <from uri="ref:queueXmlOrdersUri"/>
-            <multicast stopOnException="true" parallelProcessing="true" executorServiceRef="executor">
-                <to uri="ref:queueAccountingUri"/>
-                <to uri="ref:queueProductionUri"/>
-            </multicast>
+            <from uri="ref:queueXmlOrdersUri" />
+            <setHeader headerName="customer">
+                <xpath>/order/@customer</xpath>
+            </setHeader>
+            <process ref="recipientCalculatorProcessor" />
+            <recipientList>
+                <header>recipients</header>
+            </recipientList>
         </route>
 
         <route>

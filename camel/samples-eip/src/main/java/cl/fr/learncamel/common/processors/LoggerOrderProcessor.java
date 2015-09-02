@@ -18,7 +18,8 @@ public class LoggerOrderProcessor implements Processor {
     @Override
     public void process(Exchange exchange) throws Exception {
         Message msg = exchange.getIn();
-        logger.debug("BODY:->" + msg.getBody(String.class));
-        logger.debug("Received XML order: " + msg.getHeader("CamelFileName"));
+        String mfrom = msg.getHeader("JMSDestination", String.class);
+        logger.debug("BODY:->" + msg.getBody(String.class) + " ------- from: " + mfrom);
+        logger.debug("Received XML order: " + msg.getHeader("CamelFileName") +  " from" + mfrom);
     }
 }

@@ -1,5 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<order name="motor1" amount="1" customer="foo" />
-
-
-
+<order name="motor1" amount="1" customer="mazda" />

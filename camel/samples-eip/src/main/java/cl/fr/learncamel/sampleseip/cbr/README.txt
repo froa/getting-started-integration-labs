@@ -1,0 +1,1 @@
+The sample of the pattern is in cl.fr.learncamel.common.routes.OrderRouter class.

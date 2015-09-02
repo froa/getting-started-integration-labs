@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Created by froa on 8/29/15.
+ * <a>Content-based router Pattern</a>
  *
  * It takes the files from the src/data folder and put them in a queue based on the extension file type.
  *

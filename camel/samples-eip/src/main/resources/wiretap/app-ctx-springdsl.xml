@@ -17,13 +17,6 @@
 
     <context:annotation-config />
 
-    <context:component-scan base-package="cl.fr.learncamel.common"/>
-
-
-    <bean id="executor" class="java.util.concurrent.Executors" factory-method="newFixedThreadPool">
-        <constructor-arg index="0" value="${threadsExecutor}"/>
-    </bean>
-
     <camelContext id="camelCtx" xmlns="http://camel.apache.org/schema/spring">
 
         <!-- endpoints definitions - it is necessary due direct property in the uri is not supported -->
@@ -32,36 +25,31 @@
 
         <endpoint id="queueXmlOrdersUri" uri="jms:${queueXmlOrdersUri}" />
 
-        <endpoint id="queueAccountingUri" uri="jms:${queueAccountingUri}" />
+        <endpoint id="queueCsvOrdersUri" uri="jms:${queueCsvOrdersUri}" />
 
-        <endpoint id="queueProductionUri" uri="jms:${queueProductionUri}" />
+        <endpoint id="queueBadOrdersUri" uri="jms:${queueBadOrdersUri}" />
+
+        <endpoint id="queueAuditOrdersUri" uri="jms:${queueAuditOrdersUri}" />
+
+        <endpoint id="queueContinuedOrderProcessingUri" uri="jms:${queueContinuedOrderProcessingUri}" />
 
         <route>
             <from uri="ref:fileInEP"/>
+            <wireTap uri="ref:queueAuditOrdersUri"/>
             <choice>
                 <when>
                     <simple>${header.CamelFileName} regex '^.*xml$'</simple>
                     <to uri="ref:queueXmlOrdersUri"/>
                 </when>
+                <when>
+                    <simple>${header.CamelFileName} regex '^.*csv$'</simple>
+                    <to uri="ref:queueCsvOrdersUri"/>
+                </when>
+                <otherwise>
+                    <to uri="ref:queueBadOrdersUri"/>
+                </otherwise>
             </choice>
-        </route>
-
-        <route>
-            <from uri="ref:queueXmlOrdersUri"/>
-            <multicast stopOnException="true" parallelProcessing="true" executorServiceRef="executor">
-                <to uri="ref:queueAccountingUri"/>
-                <to uri="ref:queueProductionUri"/>
-            </multicast>
-        </route>
-
-        <route>
-            <from uri="ref:queueAccountingUri"/>
-            <process ref="loggerOrderProcessor"/>
-        </route>
-
-        <route>
-            <from uri="ref:queueProductionUri"/>
-            <process ref="loggerOrderProcessor"/>
+            <to uri="ref:queueContinuedOrderProcessingUri"/>
         </route>
 
     </camelContext>

@@ -1,4 +1,4 @@
-package cl.fr.learncamel.sampleseip.multicasting.routes;
+package cl.fr.learncamel.common.routes;
 
 import org.apache.camel.Processor;
 import org.apache.camel.spring.SpringRouteBuilder;
