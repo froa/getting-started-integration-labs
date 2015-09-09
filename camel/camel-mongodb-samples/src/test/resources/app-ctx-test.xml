@@ -1,0 +1,28 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                            http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <context:property-placeholder  location="classpath:app-ctx-test.properties"/>
+
+    <bean id="mongoBean" class="com.mongodb.Mongo">
+        <constructor-arg name="host" value="${mongodb.host}" />
+        <constructor-arg name="port" value="${mongodb.port}" />
+    </bean>
+
+    <context:annotation-config />
+
+    <!-- if I set the scan component at previous level (cl.fr.learncamel.common), the scan of the camel do not take the routes -->
+    <context:component-scan base-package="cl.fr.poc.camelmongodb.sample.common"/>
+
+    <camelContext id="camelCtx" xmlns="http://camel.apache.org/schema/spring">
+        <packageScan>
+            <package>cl.fr.poc.camelmongodb.sample.routes</package>
+            <excludes>**.*Test*</excludes>
+            <includes>**.*</includes>
+        </packageScan>
+    </camelContext>
+
+</beans>
